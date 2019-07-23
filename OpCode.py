@@ -1,9 +1,15 @@
+# Open DI CDK Partner Vendor Profile Excel Sheet required
+# TO DO: Use timestr to get a moving date so the pull is from the last 2 weeks
 import csv
 import xml.etree.ElementTree as ET
 import requests
 import time
-url = 'https://3pa.dmotorworks.com/pip-extract/gl-coa/extract'
-parameters = {'queryId': 'ACCTGL_COA_Bulk', 'dealerId': '3PA0002255', 'qparamCompany': '5',
+
+# URL from Excel Sheet
+url = ''
+
+# Get queryId from Excel Sheet
+parameters = {'queryId': '', 'dealerId': '3PA0002255', 'qparamCompany': '5',
               'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
 r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
@@ -20,16 +26,21 @@ data = open('C:/Users/swith/Documents/glcoa'+timestr+'.csv', 'w')
 csvwriter = csv.writer(data)
 data_head = []
 count = 0
+#Update the url and namespace
 for member in root.findall("{http://www.dmotorworks.com/pip-extract-accounting-gl}GLCOA"):
 
-    glcoa = []
+    items = []
     if count == 0:
-        #accountDesc = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}AccountDescription').tag
+        # add data_head.append('Column Name')
         data_head.append('Account Description')
+
         csvwriter.writerow(data_head)
         count = count + 1
 
+    # Recreate the following two rows for each column; replace the url with the url from the Excel doc
     accountDesc = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}AccountDescription').text
-    glcoa.append(accountDesc)
-    csvwriter.writerow(glcoa)
+    items.append(accountDesc)
+
+    csvwriter.writerow(items)
+
 data.close()
