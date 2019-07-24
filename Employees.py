@@ -29,7 +29,7 @@ count = 0
 
 #Update the url and namespace
 for member in root.findall("{http://www.dmotorworks.com/pip-extract-help-employee}HelpEmployee"):
-   
+
     items = []
     if count == 0:
         # add data_head.append('Column Name')
