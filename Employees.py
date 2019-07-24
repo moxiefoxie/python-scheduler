@@ -6,40 +6,43 @@ import requests
 import time
 
 # URL from Excel Sheet
-url = ''
+url = 'https://3pa.dmotorworks.com/pip-extract/help-employee/extract'
 
 # Get queryId from Excel Sheet
-parameters = {'queryId': '', 'dealerId': '3PA0002255', 'qparamCompany': '5',
+parameters = {'queryId': 'HEMPL_Bulk_Service', 'dealerId': '3PA0002255', 'qparamCompany': '5',
               'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
 r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
 print(r.url)
-file = open('C:/Users/swith/Documents/data.xml', 'w')
+file = open('C:/Users/swith/Documents/employees.xml', 'w')
 file.write(r.text)
 file.close()
-tree = ET.parse('C:/Users/swith/Documents/data.xml')
+tree = ET.parse('C:/Users/swith/Documents/employees.xml')
 
 root = tree.getroot()
 timestr = time.strftime("%m%d%Y-%H%M%S")
-data = open('C:/Users/swith/Documents/glcoa'+timestr+'.csv', 'w')
+data = open('C:/Users/swith/Documents/employees'+timestr+'.csv', 'w')
 
 csvwriter = csv.writer(data)
 data_head = []
 count = 0
-#Update the url and namespace
-for member in root.findall("{http://www.dmotorworks.com/pip-extract-accounting-gl}GLCOA"):
 
+#Update the url and namespace
+for member in root.findall("{http://www.dmotorworks.com/pip-extract-help-employee}HelpEmployee"):
+   
     items = []
     if count == 0:
         # add data_head.append('Column Name')
-        data_head.append('Account Description')
-
+        data_head.append('ID')
+        data_head.append('Name')
         csvwriter.writerow(data_head)
         count = count + 1
 
     # Recreate the following two rows for each column; replace the url with the url from the Excel doc
-    accountDesc = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}AccountDescription').text
-    items.append(accountDesc)
+    Id = member.find('{http://www.dmotorworks.com/pip-extract-help-employee}Id').text
+    items.append(Id)
+    Name = member.find('{http://www.dmotorworks.com/pip-extract-help-employee}Name').text
+    items.append(Name)
 
     csvwriter.writerow(items)
 
