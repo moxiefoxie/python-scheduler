@@ -6,40 +6,57 @@ import requests
 import time
 
 # URL from Excel Sheet
-url = ''
+url = 'https://3pa.dmotorworks.com/pip-extract/gl-je-detail/extract'
 
 # Get queryId from Excel Sheet
-parameters = {'queryId': '', 'dealerId': '3PA0002255', 'qparamCompany': '5',
+parameters = {'queryId': 'ACCTGL_JE_DateRange_D', 'dealerId': '3PA0002255', 'qparamCompany': '5',
               'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
 r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
 print(r.url)
-file = open('C:/Users/swith/Documents/data.xml', 'w')
+file = open('C:/Users/swith/Documents/GLDetails.xml', 'w')
 file.write(r.text)
 file.close()
-tree = ET.parse('C:/Users/swith/Documents/data.xml')
+tree = ET.parse('C:/Users/swith/Documents/GLDetails.xml')
 
 root = tree.getroot()
 timestr = time.strftime("%m%d%Y-%H%M%S")
-data = open('C:/Users/swith/Documents/glcoa'+timestr+'.csv', 'w')
+data = open('C:/Users/swith/Documents/GLDetails'+timestr+'.csv', 'w')
 
 csvwriter = csv.writer(data)
 data_head = []
 count = 0
 #Update the url and namespace
-for member in root.findall("{http://www.dmotorworks.com/pip-extract-accounting-gl}GLCOA"):
+for member in root.findall("{http://www.dmotorworks.com/pip-extract-accounting-gl}GLJEDetail"):
 
     items = []
     if count == 0:
         # add data_head.append('Column Name')
-        data_head.append('Account Description')
-
+        data_head.append('Control')
+        data_head.append('JournalID')
+        data_head.append('AccountingDate')
+        data_head.append('DetailDescription')
+        data_head.append('AccountNumber')
+        data_head.append('PostingAmount')
+        data_head.append('Refer')
         csvwriter.writerow(data_head)
         count = count + 1
 
     # Recreate the following two rows for each column; replace the url with the url from the Excel doc
-    accountDesc = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}AccountDescription').text
-    items.append(accountDesc)
+    Control = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}Control').text
+    items.append(Control)
+    JournalID = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}JournalID').text
+    items.append(JournalID)
+    AccountingDate = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}AccountingDate').text
+    items.append(AccountingDate)
+    DetailDescription = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}DetailDescription').text
+    items.append(DetailDescription)
+    AccountNumber = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}AccountNumber').text
+    items.append(AccountNumber)
+    PostingAmount = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}PostingAmount').text
+    items.append(PostingAmount)
+    Refer = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}Refer').text
+    items.append(Refer)
 
     csvwriter.writerow(items)
 
