@@ -5,42 +5,80 @@ import xml.etree.ElementTree as ET
 import requests
 import time
 
-# URL from Excel Sheet
-url = ''
+def salesinstall():
+    # URL from Excel Sheet
+    url = 'https://3pa.dmotorworks.com/pip-extract/fisaleshistory/extract'
 
-# Get queryId from Excel Sheet
-parameters = {'queryId': '', 'dealerId': '3PA0002255', 'qparamCompany': '5',
+    # Get queryId from Excel Sheet
+    parameters = {'queryId': 'FISH_DateRange', 'dealerId': '3PA0002255', 'qparamCompany': '5',
               'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
-r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
+    r   = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
-print(r.url)
-file = open('C:/Users/swith/Documents/data.xml', 'w')
-file.write(r.text)
-file.close()
-tree = ET.parse('C:/Users/swith/Documents/data.xml')
+    print(r.url)
+    file = open('C:/Users/swith/Documents/SalesWeekly.xml', 'w')
+    file.write(r.text)
+    file.close()
+    tree = ET.parse('C:/Users/swith/Documents/SalesWeekly.xml')
 
-root = tree.getroot()
-timestr = time.strftime("%m%d%Y-%H%M%S")
-data = open('C:/Users/swith/Documents/glcoa'+timestr+'.csv', 'w')
+    root = tree.getroot()
+    timestr = time.strftime("%m%d%Y-%H%M%S")
+    data = open('C:/Users/swith/Documents/SalesWeekly'+timestr+'.csv', 'w')
 
-csvwriter = csv.writer(data)
-data_head = []
-count = 0
-#Update the url and namespace
-for member in root.findall("{http://www.dmotorworks.com/pip-extract-accounting-gl}GLCOA"):
+    csvwriter = csv.writer(data)
+    data_head = []
+    count = 0
+    #Update the url and namespace
+    for member in root.findall("{http://www.dmotorworks.com/pip-extract-fisales-history}FISalesHistory"):
 
-    items = []
-    if count == 0:
-        # add data_head.append('Column Name')
-        data_head.append('Account Description')
-
-        csvwriter.writerow(data_head)
-        count = count + 1
+       items = []
+       if count == 0:
+            # add data_head.append('Column Name')
+           data_head.append('StockNo')
+           data_head.append('SalesDate')
+           data_head.append('FIDealType')
+           data_head.append('Year')
+           data_head.append('Make')
+           data_head.append('Model')
+           data_head.append('Salesperson1')
+           data_head.append('Salesperson2')
+           data_head.append('DealType')
+           data_head.append('VIN')
+           data_head.append('BackGross')
+           data_head.append('FrontGross')
+           data_head.append('TotalGross')
+           data_head.append('GrossProfit')
+           csvwriter.writerow(data_head)
+           count = count + 1
 
     # Recreate the following two rows for each column; replace the url with the url from the Excel doc
-    accountDesc = member.find('{http://www.dmotorworks.com/pip-extract-accounting-gl}AccountDescription').text
-    items.append(accountDesc)
+    StockNo = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}StockNo').text
+    items.append(StockNo)
+    SalesDate = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}SalesDate').text
+    items.append(SalesDate)
+    FIDealType = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}FIDealType').text
+    items.append(FIDealType)
+    Year = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}Year').text
+    items.append(Year)
+    Make = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}Make').text
+    items.append(Make)
+    Model = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}Model').text
+    items.append(Model)
+    Salesperson1 = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}Salesperson1').text
+    items.append(Salesperson1)
+    Salesperson2 = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}Salesperson2').text
+    items.append(Salesperson2)
+    DealType = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}DealType').text
+    items.append(DealType)
+    VIN = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}VIN').text
+    items.append(VIN)
+    BackGross = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}BackGross').text
+    items.append(BackGross)
+    FrontGross = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}FrontGross').text
+    items.append(FrontGross)
+    TotalGross = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}TotalGross').text
+    items.append(TotalGross)
+    GrossProfit = member.find('{http://www.dmotorworks.com/pip-extract-fisales-history}GrossProfit').text
+    items.append(GrossProfit)
 
     csvwriter.writerow(items)
-
-data.close()
+    data.close()

@@ -4,11 +4,6 @@ import Employees
 import OpCode
 
 
-
-def installrun():
-    SalesInstall.salesinstall()
-    GLDetail.gldetail()
+def monthlyrun():
     Employees.employees()
     OpCode.opcode()
-
-

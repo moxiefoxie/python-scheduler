@@ -5,45 +5,47 @@ import xml.etree.ElementTree as ET
 import requests
 import time
 
-# URL from Excel Sheet
-url = 'https://3pa.dmotorworks.com/pip-extract/help-employee/extract'
 
-# Get queryId from Excel Sheet
-parameters = {'queryId': 'HEMPL_Bulk_Service', 'dealerId': '3PA0002255', 'qparamCompany': '5',
-              'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
-r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
+def employees():
+    # URL from Excel Sheet
+    url = 'https://3pa.dmotorworks.com/pip-extract/help-employee/extract'
 
-print(r.url)
-file = open('C:/Users/swith/Documents/employees.xml', 'w')
-file.write(r.text)
-file.close()
-tree = ET.parse('C:/Users/swith/Documents/employees.xml')
+    # Get queryId from Excel Sheet
+    parameters = {'queryId': 'HEMPL_Bulk_Service', 'dealerId': '3PA0002255', 'qparamCompany': '5',
+                  'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
+    r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
-root = tree.getroot()
-timestr = time.strftime("%m%d%Y-%H%M%S")
-data = open('C:/Users/swith/Documents/employees'+timestr+'.csv', 'w')
+    print(r.url)
+    file = open('C:/Users/swith/Documents/employees.xml', 'w')
+    file.write(r.text)
+    file.close()
+    tree = ET.parse('C:/Users/swith/Documents/employees.xml')
 
-csvwriter = csv.writer(data)
-data_head = []
-count = 0
+    root = tree.getroot()
+    timestr = time.strftime("%m%d%Y-%H%M%S")
+    data = open('C:/Users/swith/Documents/employees'+timestr+'.csv', 'w')
 
-#Update the url and namespace
-for member in root.findall("{http://www.dmotorworks.com/pip-extract-help-employee}HelpEmployee"):
+    csvwriter = csv.writer(data)
+    data_head = []
+    count = 0
 
-    items = []
-    if count == 0:
-        # add data_head.append('Column Name')
-        data_head.append('ID')
-        data_head.append('Name')
-        csvwriter.writerow(data_head)
-        count = count + 1
+    #Update the url and namespace
+    for member in root.findall("{http://www.dmotorworks.com/pip-extract-help-employee}HelpEmployee"):
 
-    # Recreate the following two rows for each column; replace the url with the url from the Excel doc
-    Id = member.find('{http://www.dmotorworks.com/pip-extract-help-employee}Id').text
-    items.append(Id)
-    Name = member.find('{http://www.dmotorworks.com/pip-extract-help-employee}Name').text
-    items.append(Name)
+        items = []
+        if count == 0:
+            # add data_head.append('Column Name')
+            data_head.append('ID')
+            data_head.append('Name')
+            csvwriter.writerow(data_head)
+            count = count + 1
 
-    csvwriter.writerow(items)
+        # Recreate the following two rows for each column; replace the url with the url from the Excel doc
+        Id = member.find('{http://www.dmotorworks.com/pip-extract-help-employee}Id').text
+        items.append(Id)
+        Name = member.find('{http://www.dmotorworks.com/pip-extract-help-employee}Name').text
+        items.append(Name)
 
-data.close()
+        csvwriter.writerow(items)
+
+    data.close()
