@@ -7,3 +7,6 @@ import FF_OpCode
 def monthlyrun():
     FF_Employees.employees()
     FF_OpCode.opcode()
+
+
+monthlyrun()

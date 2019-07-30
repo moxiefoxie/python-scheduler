@@ -12,3 +12,4 @@ def installrun():
     FF_OpCode.opcode()
 
 
+installrun()

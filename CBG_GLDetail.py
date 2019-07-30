@@ -6,6 +6,7 @@ import requests
 import time
 from datetime import datetime, timedelta
 
+
 def gldetail():
     # URL from Excel Sheet
     url = 'https://3pa.dmotorworks.com/pip-extract/gl-je-detail/extract'
@@ -63,3 +64,6 @@ def gldetail():
         csvwriter.writerow(items)
 
     data.close()
+
+
+gldetail()

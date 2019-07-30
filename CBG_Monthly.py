@@ -7,3 +7,6 @@ import CBG_OpCode
 def monthlyrun():
     CBG_Employees.employees()
     CBG_OpCode.opcode()
+
+
+monthlyrun()

@@ -15,14 +15,14 @@ def salesinstall():
     r   = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
     print(r.url)
-    file = open('C:/FTPData/Hardy/XML Files/FFSalesWeekly.xml', 'w')
+    file = open('C:/FTPData/Hardy/XML Files/FFSalesInstall.xml', 'w')
     file.write(r.text)
     file.close()
-    tree = ET.parse('C:/FTPData/Hardy/XML Files/FFSalesWeekly.xml')
+    tree = ET.parse('C:/FTPData/Hardy/XML Files/FFSalesInstall.xml')
 
     root = tree.getroot()
     timestr = time.strftime("%m%d%Y-%H%M%S")
-    data = open('C:/FTPData/Hardy/Family Ford/FFSalesWeekly'+timestr+'.csv', 'w')
+    data = open('C:/FTPData/Hardy/Family Ford/FFSalesInstall'+timestr+'.csv', 'w')
 
     csvwriter = csv.writer(data)
     data_head = []

@@ -12,3 +12,6 @@ def installrun():
     CBG_OpCode.opcode()
 
 
+installrun()
+
+

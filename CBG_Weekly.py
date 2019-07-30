@@ -8,3 +8,6 @@ def weeklyrun():
     CBG_SalesWeekly.salesweekly()
     CBG_GLDetail.gldetail()
 
+
+weeklyrun()
+

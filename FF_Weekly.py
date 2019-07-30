@@ -8,3 +8,6 @@ def weeklyrun():
     FF_SalesWeekly.salesweekly()
     FF_GLDetail.gldetail()
 
+
+weeklyrun()
+
