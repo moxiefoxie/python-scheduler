@@ -8,21 +8,21 @@ import time
 def salesinstall():
     # URL from Excel Sheet
     url = 'https://3pa.dmotorworks.com/pip-extract/fisaleshistory/extract'
-
+    today = time.strftime("%m/%d/%Y")
     # Get queryId from Excel Sheet
-    parameters = {'queryId': 'FISH_DateRange', 'dealerId': '3PA0002255', 'qparamCompany': '5',
-              'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
-    r   = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
+    parameters = {'queryId': 'FISH_DateRange', 'dealerId': '3PA0002255', 'qparamCompany': '1',
+              'qparamStartDate': '07/21/2018', 'qparamEndDate': today}
+    r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
     print(r.url)
-    file = open('C:/Users/swith/Documents/SalesWeekly.xml', 'w')
+    file = open('C:/FTPData/Hardy/XML Files/CBGSalesWeekly.xml', 'w')
     file.write(r.text)
     file.close()
-    tree = ET.parse('C:/Users/swith/Documents/SalesWeekly.xml')
+    tree = ET.parse('C:/FTPData/Hardy/XML Files/CBGSalesWeekly.xml')
 
     root = tree.getroot()
     timestr = time.strftime("%m%d%Y-%H%M%S")
-    data = open('C:/Users/swith/Documents/SalesWeekly'+timestr+'.csv', 'w')
+    data = open('C:/FTPData/Hardy/Hardy Chevy Buick GMC/CBGSalesWeekly'+timestr+'.csv', 'w')
 
     csvwriter = csv.writer(data)
     data_head = []

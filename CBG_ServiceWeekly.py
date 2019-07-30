@@ -7,21 +7,21 @@ import time
 
 # URL from Excel Sheet
 url = ''
-
+today = time.strftime("%m/%d/%Y")
 # Get queryId from Excel Sheet
-parameters = {'queryId': '', 'dealerId': '3PA0002255', 'qparamCompany': '5',
-              'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
+parameters = {'queryId': '', 'dealerId': '3PA0002255', 'qparamCompany': '1',
+              'qparamStartDate': '07/21/2018', 'qparamEndDate': today}
 r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
 print(r.url)
-file = open('C:/Users/swith/Documents/data.xml', 'w')
+file = open('C:/FTPData/Hardy/XML Files/CBGservice.xml', 'w')
 file.write(r.text)
 file.close()
-tree = ET.parse('C:/Users/swith/Documents/data.xml')
+tree = ET.parse('C:/FTPData/Hardy/XML Files/CBGservice.xml')
 
 root = tree.getroot()
 timestr = time.strftime("%m%d%Y-%H%M%S")
-data = open('C:/Users/swith/Documents/glcoa'+timestr+'.csv', 'w')
+data = open('C:/FTPData/Hardy/Hardy Chevy Buick GMC/CBGglcoa'+timestr+'.csv', 'w')
 
 csvwriter = csv.writer(data)
 data_head = []

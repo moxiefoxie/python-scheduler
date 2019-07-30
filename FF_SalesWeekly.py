@@ -4,22 +4,23 @@ import csv
 import xml.etree.ElementTree as ET
 import requests
 import time
-
+from datetime import datetime, timedelta
 
 def salesweekly():
     # URL from Excel Sheet
     url = 'https://3pa.dmotorworks.com/pip-extract/fisales-closed/extract'
-
+    today = time.strftime("%m/%d/%Y")
+    lastweek = datetime.strftime(datetime.now() - timedelta(7), '%m/%d/%Y')
     # Get queryId from Excel Sheet
     parameters = {'queryId': 'FISC_DateRange', 'dealerId': '3PA0002255', 'qparamCompany': '5',
-                  'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
+                  'qparamStartDate': lastweek, 'qparamEndDate': today}
     r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
     print(r.url)
-    file = open('C:/Users/swith/Documents/SalesWeekly.xml', 'w')
+    file = open('C:/FTPData/Hardy/XML Files/FFSalesWeekly.xml', 'w')
     file.write(r.text)
     file.close()
-    tree = ET.parse('C:/Users/swith/Documents/SalesWeekly.xml')
+    tree = ET.parse('C:/FTPData/Hardy/Family Ford/FFFFSalesWeekly.xml')
 
     root = tree.getroot()
     timestr = time.strftime("%m%d%Y-%H%M%S")

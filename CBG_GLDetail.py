@@ -4,26 +4,26 @@ import csv
 import xml.etree.ElementTree as ET
 import requests
 import time
-
+from datetime import datetime, timedelta
 
 def gldetail():
     # URL from Excel Sheet
     url = 'https://3pa.dmotorworks.com/pip-extract/gl-je-detail/extract'
-
+    today = time.strftime("%m/%d/%Y")
     # Get queryId from Excel Sheet
-    parameters = {'queryId': 'ACCTGL_JE_DateRange_D', 'dealerId': '3PA0002255', 'qparamCompany': '5',
-                  'qparamStartDate': '07/21/2019', 'qparamEndDate': '07/23/2019'}
+    parameters = {'queryId': 'ACCTGL_JE_DateRange_D', 'dealerId': '3PA0002255', 'qparamCompany': '1',
+                  'qparamStartDate': '07/21/2018', 'qparamEndDate': today}
     r = requests.post(url, params=parameters, auth=('opendi', 'WpmYq0YN2xwq'))
 
     print(r.url)
-    file = open('C:/Users/swith/Documents/GLDetails.xml', 'w')
+    file = open('C:/FTPData/Hardy/XML Files/CBGGLDetails.xml', 'w')
     file.write(r.text)
     file.close()
-    tree = ET.parse('C:/Users/swith/Documents/GLDetails.xml')
+    tree = ET.parse('C:/FTPData/Hardy/XML Files/CBGGLDetails.xml')
 
     root = tree.getroot()
     timestr = time.strftime("%m%d%Y-%H%M%S")
-    data = open('C:/Users/swith/Documents/GLDetails'+timestr+'.csv', 'w')
+    data = open('C:/FTPData/Hardy/Hardy Chevy Buick GMC/CBGGLDetails'+timestr+'.csv', 'w')
 
     csvwriter = csv.writer(data)
     data_head = []
